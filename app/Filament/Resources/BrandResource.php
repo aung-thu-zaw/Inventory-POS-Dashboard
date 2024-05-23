@@ -3,16 +3,12 @@
 namespace App\Filament\Resources;
 
 use App\Filament\Resources\BrandResource\Pages;
-use App\Filament\Resources\BrandResource\RelationManagers;
 use App\Models\Brand;
-use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
 
 class BrandResource extends Resource
 {
@@ -30,13 +26,13 @@ class BrandResource extends Resource
     {
         return $table
             ->columns(Brand::getTableColumns())
-            ->defaultSort("id", "desc")
+            ->defaultSort('id', 'desc')
             ->filters([
                 SelectFilter::make('status')
                     ->options([
-                        true => "Active",
-                        false => "Inactive",
-                    ])
+                        true => 'Active',
+                        false => 'Inactive',
+                    ]),
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),

@@ -3,47 +3,45 @@
 namespace App\Models;
 
 use Filament\Forms;
+use Filament\Tables;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Filament\Tables;
-use Filament\Tables\Table;
 use Illuminate\Support\Str;
 
 class Brand extends Model
 {
     use HasFactory;
 
-
     /**
      * @return array<mixed>
      */
     public static function getForm(): array
     {
-        return[
-                Forms\Components\Section::make()
-                    ->schema([
-                        Forms\Components\TextInput::make('name')
-                            ->label('Brand Name')
-                            ->unique(ignoreRecord: true)
-                            ->required(),
+        return [
+            Forms\Components\Section::make()
+                ->schema([
+                    Forms\Components\TextInput::make('name')
+                        ->label('Brand Name')
+                        ->unique(ignoreRecord: true)
+                        ->required(),
 
-                        Forms\Components\Textarea::make('description')
-                            ->rows(5)
-                            ->helperText("Maximum 600 characters."),
+                    Forms\Components\Textarea::make('description')
+                        ->rows(5)
+                        ->helperText('Maximum 600 characters.'),
 
-                        Forms\Components\FileUpload::make('logo')
-                            ->label('Brand Logo')
-                            ->image()
-                            ->disk('public')
-                            ->directory('brands')
-                            ->preserveFilenames()
-                            ->maxSize(1024 * 1024 * 2)
-                            ->required(),
+                    Forms\Components\FileUpload::make('logo')
+                        ->label('Brand Logo')
+                        ->image()
+                        ->disk('public')
+                        ->directory('brands')
+                        ->preserveFilenames()
+                        ->maxSize(1024 * 1024 * 2)
+                        ->required(),
 
-                            Forms\Components\Toggle::make('status')
-                                ->required(),
-                    ]),
-            ];
+                    Forms\Components\Toggle::make('status')
+                        ->required(),
+                ]),
+        ];
     }
 
     /**
