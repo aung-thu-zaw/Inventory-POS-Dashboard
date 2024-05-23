@@ -6,11 +6,29 @@ use Filament\Forms;
 use Filament\Tables;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Str;
 
-class Brand extends Model
+class Category extends Model
 {
     use HasFactory;
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo<Category,Category>
+     */
+    public function parent(): BelongsTo
+    {
+        return $this->belongsTo(Category::class, 'parent_id');
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany<Category>
+     */
+    public function children(): HasMany
+    {
+        return $this->hasMany(Category::class, 'parent_id')->with('children');
+    }
 
     /**
      * @return array<mixed>
@@ -20,8 +38,17 @@ class Brand extends Model
         return [
             Forms\Components\Section::make()
                 ->schema([
+                    Forms\Components\Select::make("parent_id")
+                        ->label("Parent Category")
+                        ->relationship('parent', 'name')
+                        ->exists('categories', 'id')
+                        ->searchable()
+                        ->preload()
+                        ->nullable()
+                        ->default(null),
+
                     Forms\Components\TextInput::make('name')
-                        ->label('Brand Name')
+                        ->label('Category Name')
                         ->unique(ignoreRecord: true)
                         ->required(),
 
@@ -30,15 +57,6 @@ class Brand extends Model
                         ->maxLength(600)
                         ->nullable()
                         ->helperText('Maximum 600 characters.'),
-
-                    Forms\Components\FileUpload::make('logo')
-                        ->label('Brand Logo')
-                        ->image()
-                        ->disk('public')
-                        ->directory('brands')
-                        ->preserveFilenames()
-                        ->maxSize(1024 * 1024 * 2)
-                        ->required(),
 
                     Forms\Components\Toggle::make('status')
                         ->required(),
@@ -52,12 +70,15 @@ class Brand extends Model
     public static function getTableColumns(): array
     {
         return [
-            Tables\Columns\ImageColumn::make('logo')
-                ->square(),
+            Tables\Columns\TextColumn::make('parent.name')
+                ->label('Parent Category')
+                ->default('-')
+                ->numeric()
+                ->sortable(),
 
             Tables\Columns\TextColumn::make('name')
-                ->label('Brand')
-                ->description(fn (Brand $record): string => $record->description ? Str::limit($record->description, 60) : '')
+                ->label('Category')
+                ->description(fn (Category $record): string => $record->description ? Str::limit($record->description, 60) : '')
                 ->sortable()
                 ->searchable(),
 
