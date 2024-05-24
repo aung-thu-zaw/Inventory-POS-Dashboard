@@ -17,7 +17,10 @@ class DatabaseSeeder extends Seeder
             BrandSeeder::class,
             CategorySeeder::class,
             UnitSeeder::class,
-            WarrantySeeder::class
+            WarrantySeeder::class,
+            CountrySeeder::class,
+            ProvinceSeeder::class,
+            CitySeeder::class
         ]);
     }
 }
