@@ -20,7 +20,8 @@ class DatabaseSeeder extends Seeder
             WarrantySeeder::class,
             CountrySeeder::class,
             ProvinceSeeder::class,
-            CitySeeder::class
+            CitySeeder::class,
+            WarehouseSeeder::class
         ]);
     }
 }
