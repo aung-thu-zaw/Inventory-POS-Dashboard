@@ -2,31 +2,35 @@
 
 namespace App\Filament\Resources;
 
-use App\Filament\Resources\BrandResource\Pages;
-use App\Models\Brand;
+use App\Filament\Resources\UnitResource\Pages;
+use App\Filament\Resources\UnitResource\RelationManagers;
+use App\Models\Unit;
+use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\SoftDeletingScope;
 
-class BrandResource extends Resource
+class UnitResource extends Resource
 {
-    protected static ?string $model = Brand::class;
+    protected static ?string $model = Unit::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-tag';
+    protected static ?string $navigationIcon = 'heroicon-o-scale';
 
     public static function form(Form $form): Form
     {
         return $form
-            ->schema(Brand::getForm());
+            ->schema(Unit::getForm());
     }
 
     public static function table(Table $table): Table
     {
         return $table
-            ->columns(Brand::getTableColumns())
-            ->defaultSort('id', 'desc')
+            ->columns(Unit::getTableColumns())
+            ->defaultSort("id", "desc")
             ->filters([
                 SelectFilter::make('status')
                     ->options([
@@ -55,7 +59,7 @@ class BrandResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListBrands::route('/'),
+            'index' => Pages\ListUnits::route('/'),
         ];
     }
 }
