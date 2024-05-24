@@ -22,7 +22,8 @@ class DatabaseSeeder extends Seeder
             ProvinceSeeder::class,
             CitySeeder::class,
             WarehouseSeeder::class,
-            SupplierSeeder::class
+            SupplierSeeder::class,
+            CustomerSeeder::class
         ]);
     }
 }
