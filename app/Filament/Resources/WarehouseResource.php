@@ -4,11 +4,19 @@ namespace App\Filament\Resources;
 
 use App\Filament\Resources\WarehouseResource\Pages;
 use App\Filament\Resources\WarehouseResource\RelationManagers;
+use App\Models\City;
+use App\Models\Province;
 use App\Models\Warehouse;
+use Closure;
 use Filament\Forms;
+use Filament\Forms\Components\Select;
 use Filament\Forms\Form;
+use Filament\Forms\Get;
 use Filament\Resources\Resource;
 use Filament\Tables;
+use Filament\Tables\Enums\FiltersLayout;
+use Filament\Tables\Filters\Filter;
+use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
@@ -31,8 +39,30 @@ class WarehouseResource extends Resource
             ->columns(Warehouse::getTableColumns())
             ->defaultSort("id", "desc")
             ->filters([
-                //
-            ])
+                SelectFilter::make('country_id')
+                    ->label("Country")
+                    ->relationship("country", "name")
+                    ->searchable()
+                    ->preload(),
+
+                SelectFilter::make('province_id')
+                    ->label("Province")
+                    ->relationship("province", "name")
+                    ->searchable()
+                    ->preload(),
+
+                SelectFilter::make('city_id')
+                    ->label("City")
+                    ->relationship("city", "name")
+                    ->searchable()
+                    ->preload(),
+
+                SelectFilter::make('status')
+                    ->options([
+                        true => 'Active',
+                        false => 'Inactive',
+                ]),
+            ], layout: FiltersLayout::AboveContent)
             ->actions([
                 Tables\Actions\EditAction::make(),
                 Tables\Actions\DeleteAction::make(),

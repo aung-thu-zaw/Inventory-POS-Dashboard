@@ -53,7 +53,7 @@ class Warehouse extends Model
                         ->columnSpanFull(),
 
                     Forms\Components\Select::make('country_id')
-                        ->relationship('country', 'name')
+                        ->options(Country::pluck('name', 'id'))
                         ->searchable()
                         ->preload()
                         ->live()
@@ -62,23 +62,18 @@ class Warehouse extends Model
                         ->required(),
 
                     Forms\Components\Select::make('province_id')
-                        ->relationship('province', 'name')
                         ->options(fn (Get $get) => Province::where('country_id', (int) $get('country_id'))->orderBy('name')->pluck('name', 'id'))
-                        ->required()
-                        // ->searchable()
-                        // ->preload()
+                        ->searchable()
+                        ->preload()
                         ->live()
                         ->afterStateUpdated(fn (Set $set) => $set('city_id', null))
-                        ->disabled(fn (Get $get): bool => $get('country_id') ? false : true),
+                        ->required(),
 
                     Forms\Components\Select::make('city_id')
-                        ->relationship('city', 'name')
                         ->options(fn (Get $get) => City::where('province_id', (int) $get('province_id'))->orderBy('name')->pluck('name', 'id'))
-                        // ->searchable()
-                        // ->preload()
-                        ->required()
-                        ->live()
-                        ->disabled(fn (Get $get): bool => $get('country_id') && $get('province_id') ? false : true),
+                        ->searchable()
+                        ->preload()
+                        ->required(),
 
                     Forms\Components\TextInput::make('zip_code')
                         ->columnSpanFull(),
@@ -137,10 +132,12 @@ class Warehouse extends Model
                 ->searchable(),
 
             Tables\Columns\TextColumn::make('contact_email')
-                ->sortable(),
+                ->sortable()
+                ->searchable(),
 
             Tables\Columns\TextColumn::make('contact_phone')
-                ->sortable(),
+                ->sortable()
+                ->searchable(),
 
             Tables\Columns\ToggleColumn::make('status'),
 

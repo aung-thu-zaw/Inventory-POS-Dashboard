@@ -82,7 +82,7 @@ class Supplier extends Model
                             ->columns(3)
                             ->schema([
                                 Forms\Components\Select::make('country_id')
-                                    ->relationship('country', 'name')
+                                    ->options(Country::pluck('name', 'id'))
                                     ->searchable()
                                     ->preload()
                                     ->live()
@@ -91,23 +91,18 @@ class Supplier extends Model
                                     ->required(),
 
                                 Forms\Components\Select::make('province_id')
-                                    ->relationship('province', 'name')
                                     ->options(fn (Get $get) => Province::where('country_id', (int) $get('country_id'))->orderBy('name')->pluck('name', 'id'))
-                                    ->required()
-                                    // ->searchable()
-                                    // ->preload()
+                                    ->searchable()
+                                    ->preload()
                                     ->live()
                                     ->afterStateUpdated(fn (Set $set) => $set('city_id', null))
-                                    ->disabled(fn (Get $get): bool => $get('country_id') ? false : true),
+                                    ->required(),
 
-                            Forms\Components\Select::make('city_id')
-                                    ->relationship('city', 'name')
+                                Forms\Components\Select::make('city_id')
                                     ->options(fn (Get $get) => City::where('province_id', (int) $get('province_id'))->orderBy('name')->pluck('name', 'id'))
-                                    // ->searchable()
-                                    // ->preload()
-                                    ->required()
-                                    ->live()
-                                    ->disabled(fn (Get $get): bool => $get('country_id') && $get('province_id') ? false : true),
+                                    ->searchable()
+                                    ->preload()
+                                    ->required(),
                         ]),
 
                     Forms\Components\Textarea::make('description')
