@@ -29,9 +29,6 @@ class Unit extends Model
                         ->label('Unit Short Form')
                         ->unique(ignoreRecord: true)
                         ->required(),
-
-                    Forms\Components\Toggle::make('status')
-                        ->required(),
                 ]),
         ];
     }
@@ -51,20 +48,7 @@ class Unit extends Model
                 ->label('Short Form')
                 ->sortable(),
 
-            Tables\Columns\TextColumn::make('status')
-                ->sortable()
-                ->formatStateUsing(fn (string $state): string => $state ? 'Active' : 'Inactive')
-                ->badge()
-                ->icon(fn (bool $state): string => match ($state) {
-                    true => 'heroicon-o-check',
-                    false => 'heroicon-o-x-circle',
-                })
-                ->color(
-                    fn (bool $state): string => match ($state) {
-                        true => 'success',
-                        false => 'danger',
-                    },
-                ),
+            Tables\Columns\ToggleColumn::make('status'),
 
             Tables\Columns\TextColumn::make('created_at')
                 ->dateTime()

@@ -16,7 +16,7 @@ return new class() extends Migration
             $table->string('name')->unique();
             $table->string('logo');
             $table->text('description')->nullable();
-            $table->boolean('status')->default(false);
+            $table->boolean('status')->default(true);
             $table->timestamps();
         });
     }

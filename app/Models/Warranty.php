@@ -43,10 +43,7 @@ class Warranty extends Model
                     Forms\Components\Textarea::make('description')
                         ->rows(5)
                         ->required()
-                        ->columnSpanFull(),
-
-                    Forms\Components\Toggle::make('status')
-                        ->required(),
+                        ->columnSpanFull()
                 ]),
         ];
     }
@@ -68,20 +65,7 @@ class Warranty extends Model
                     fn (string $state, Warranty $record): string => "$state " . Str::ucfirst($record->periods) . ($record->duration > 1 ? 's' : '')
                 ),
 
-            Tables\Columns\TextColumn::make('status')
-                ->sortable()
-                ->formatStateUsing(fn (string $state): string => $state ? 'Active' : 'Inactive')
-                ->badge()
-                ->icon(fn (bool $state): string => match ($state) {
-                    true => 'heroicon-o-check',
-                    false => 'heroicon-o-x-circle',
-                })
-                ->color(
-                    fn (bool $state): string => match ($state) {
-                        true => 'success',
-                        false => 'danger',
-                    },
-                ),
+            Tables\Columns\ToggleColumn::make('status'),
 
             Tables\Columns\TextColumn::make('created_at')
                 ->dateTime()

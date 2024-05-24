@@ -21,7 +21,7 @@ return new class () extends Migration {
             $table->string('contact_phone');
             $table->string('address');
             $table->string('zip_code')->nullable();
-            $table->boolean('status')->default(false);
+            $table->boolean('status')->default(true);
             $table->timestamps();
         });
     }
