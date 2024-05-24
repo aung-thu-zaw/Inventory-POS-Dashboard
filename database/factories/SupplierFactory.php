@@ -37,6 +37,7 @@ class SupplierFactory extends Factory
             'phone' => fake()->unique()->phoneNumber(),
             'address' => fake()->address(),
             'description' => fake()->paragraph(),
+            'created_at' => fake()->dateTimeBetween('-4 months', now()),
         ];
     }
 }

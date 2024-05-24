@@ -23,7 +23,9 @@ class DatabaseSeeder extends Seeder
             CitySeeder::class,
             WarehouseSeeder::class,
             SupplierSeeder::class,
-            CustomerSeeder::class
+            CustomerSeeder::class,
+            ExpenseCategorySeeder::class,
+            ExpenseSeeder::class
         ]);
     }
 }

@@ -38,6 +38,7 @@ class WarehouseFactory extends Factory
             'address' => fake()->address(),
             'zip_code' => fake()->postcode(),
             'status' => fake()->boolean(),
+            'created_at' => fake()->dateTimeBetween('-4 months', now()),
         ];
     }
 }
