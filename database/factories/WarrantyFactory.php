@@ -5,9 +5,9 @@ namespace Database\Factories;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Unit>
+ * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Warranty>
  */
-class UnitFactory extends Factory
+class WarrantyFactory extends Factory
 {
     /**
      * Define the model's default state.
@@ -18,7 +18,9 @@ class UnitFactory extends Factory
     {
         return [
             'name' => fake()->unique()->name(),
-            'short_name' => fake()->unique()->name(),
+            'duration' => fake()->numberBetween(1, 10),
+            'periods' => fake()->randomElement(['week', 'month', 'year']),
+            'description' => fake()->paragraph(),
             'status' => fake()->boolean(),
             'created_at' => fake()->dateTimeBetween('-4 months', now()),
         ];

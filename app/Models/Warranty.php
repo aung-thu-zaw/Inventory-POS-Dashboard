@@ -6,8 +6,9 @@ use Filament\Forms;
 use Filament\Tables;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Str;
 
-class Unit extends Model
+class Warranty extends Model
 {
     use HasFactory;
 
@@ -21,14 +22,28 @@ class Unit extends Model
                 ->columns(2)
                 ->schema([
                     Forms\Components\TextInput::make('name')
-                        ->label('Unit Name')
+                        ->label('Warranty Name')
                         ->unique(ignoreRecord: true)
+                        ->required()
+                        ->columnSpanFull(),
+
+                    Forms\Components\TextInput::make('duration')
+                        ->numeric()
+                        ->minValue(1)
                         ->required(),
 
-                    Forms\Components\TextInput::make('short_name')
-                        ->label('Unit Short Form')
-                        ->unique(ignoreRecord: true)
+                    Forms\Components\Select::make('periods')
+                        ->options([
+                            'week' => 'Week',
+                            'month' => 'Month',
+                            'year' => 'Year',
+                        ])
                         ->required(),
+
+                    Forms\Components\Textarea::make('description')
+                        ->rows(5)
+                        ->required()
+                        ->columnSpanFull(),
 
                     Forms\Components\Toggle::make('status')
                         ->required(),
@@ -43,13 +58,15 @@ class Unit extends Model
     {
         return [
             Tables\Columns\TextColumn::make('name')
-                ->label('Unit')
+                ->description(fn (Warranty $record): string => $record->description ? Str::limit($record->description, 60) : '')
                 ->sortable()
                 ->searchable(),
 
-            Tables\Columns\TextColumn::make('short_name')
-                ->label('Short Form')
-                ->sortable(),
+            Tables\Columns\TextColumn::make('duration')
+                ->sortable()
+                ->formatStateUsing(
+                    fn (string $state, Warranty $record): string => "$state " . Str::ucfirst($record->periods) . ($record->duration > 1 ? 's' : '')
+                ),
 
             Tables\Columns\TextColumn::make('status')
                 ->sortable()
